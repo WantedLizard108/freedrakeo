@@ -1,81 +1,53 @@
 class Employee:
-    name = None
-    id = None
-
-    def __init__(self, name, id):
+    def __init__(self, name, emp_id):
         self.name = name
-        self.id = id
+        self.emp_id = emp_id
 
     def get_info(self):
-        print(self.name, '\n', self.id, sep = '')
+        print('Сотрудник:', self.name, 'ID:', self.emp_id)
 
 class Manager(Employee):
-    department= None
-
-    def __init__(self, name, id, department):
-        super(Manager, self).__init__(name, id)
+    def __init__(self, name, emp_id, department):
+        Employee.__init__(self, name, emp_id)
         self.department = department
 
     def manage_project(self):
-        print(self.department)
-
-    def get_info(self):
-        super().get_info()
-        print(self.department)
+        print(self.name, 'управляет проектом в отделе', self.department)
 
 class Technician(Employee):
-    specialization = None
-
-    def __init__(self, name, id, specialization):
-        super(Technician, self).__init__(name, id)
+    def __init__(self, name, emp_id, specialization):
+        Employee.__init__(self, name, emp_id)
         self.specialization = specialization
 
     def perform_maintenance(self):
-        print(self.specialization)
-
-    def get_info(self):
-        super().get_info()
-        print(self.specialization)
+        print (self.name, 'выполняет техническое обслуживание в области', self.specialization)
 
 class TechManager(Manager, Technician):
+    def __init__(self, name, emp_id, department, specialization):
+        Manager.__init__(self, name, emp_id, department)
+        Technician.__init__(self, name, emp_id, specialization)
+        self.team = []
 
-    employee_list = ['f']
+    def add_employee(self, employee):
+        self.team.append(employee)
 
-    def __init__(self, name, id, department, specialization):
-        self.name = name
-        self.id = id
-        self.department = department
-        self.specialization = specialization
+    def get_team_info(self):
+        return [employee.get_info() for employee in self.team]
 
-    def get_info(self):
-        print(self.specialization)
+employee = Employee("Alice", 101)
+manager = Manager("Bob", 102, "Sales")
+technician = Technician("Charlie", 103, "Electronics")
+tech_manager = TechManager("Diana", 104, "IT", "Network Maintenance")
 
+employee.get_info()
+manager.get_info()
+manager.manage_project()
+technician.get_info()
+technician.perform_maintenance()
+tech_manager.get_info()
+tech_manager.manage_project()
+tech_manager.perform_maintenance()
 
-
-    def add_employee(self):
-        self.employee_list = [self.name, self.id, self.department, self.specialization]
-        print('Введите данные нового сотрудника')
-        print('Введите имя')
-        self.name = input()
-        print('Введите идентификационный номер')
-        self.department = input()
-        print('Введите отдел')
-        self.department = input()
-        print('Введите специализацию')
-        self.specialization = input()
-        self.employee_list= [self.employee_list, '\n', self.name, self.id, self.department, self.specialization]
-
-    def get_info(self):
-        print(self.employee_list)
-
-boy1 = Employee('Mike', '49621518')
-boy1.get_info()
-
-boy2 = Manager('Ron', '68455132', 'bakery')
-boy2.get_info()
-
-girl1 = Technician('Rose', '541651858', 'chef')
-girl1.get_info()
-
-girl2 = TechManager('Sally', '687888899', 'sales department', 'logistician')
-girl2.get_info()
+tech_manager.add_employee(employee)
+tech_manager.add_employee(technician)
+tech_manager.get_team_info()
